@@ -2,7 +2,7 @@
 
 This project is a pointer to codeberg where we collaborate and develop this: https://codeberg.org/brunoschroeder/qubes-git-syncer
 
-As seen on: (https://codeberg.org/brunoschroeder/qubes-git-syncer.git)
+As seen in the forum: (https://forum.qubes-os.org/t/sync-git-repositories-with-dom0-qubes-git-syncer/22739)
 
 This solution is intended have git repos easily in sync with dom0.
 
