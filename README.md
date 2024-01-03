@@ -104,6 +104,52 @@ git pull ${DOM0DIRPATH}/${PACK_NAME}
 
 One could have a script to sync on each direction. That would make it even more straightforward.
 
+**To use the script above effectively:**
+
+On dom0, typically:
+
+- you run some salt states, and do little changes, debugs and tweaks
+- you don't want to do all the work, as it is clunky, but you also prefer not losing the little changes
+- when you get to a point where you can go to a VM for more productive work
+- git commit all changes and have the branches and HEAD that you wish on the VM
+
+Then run on `dom0`:
+
+```
+bash sync.sh F <name-of-the-VM>
+
+``` 
+
+On the VM, on the project path you will:
+
+```
+git pull ~/QubesIncoming/dom0/git-conf-salt.pack
+
+```
+
+
+On the VM you develop your project (say Salt states to be run on dom0):
+
+- work naturally on the project
+- git commit changes rationally, interact with other remote gits
+- when you have something to be run on dom0, make sure you commit it to HEAD or the branch you wish to run
+
+Then go on `dom0`, same project directory and run:
+
+```
+bash sync.sh T <name-of-the-VM>
+
+```
+
+You will be asked to hit Enter twice. Once in the begining, and once before pulling the contents of the `.pack` file.
+
+The script runs a `git status` and offers a `git reset --hard` before the `git pull`.
+
+**ATTENTION** `git reset --hard` with the `git pull` will get rid of any uncommitted changes you see on the `git status`, therefore, it is your responsibility to do something about these changes. **If you do not wish to have your changes in dom0 lost, hit Ctrl+c.** 
+
+I find myself reviewing the changes on dom0, and manually adding them on the VM, committing there again and then running `sync.sh` ready to have it `git reset --hard`.
+
+
 ### Attention
 
 1. Attention, it might be better to have all commits made and HEAD in place.
