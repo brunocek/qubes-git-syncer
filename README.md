@@ -170,7 +170,7 @@ But if you're in github and lazy to switch, here goes `dom0syncer.sh` :
 # https://codeberg.org/brunoschroeder/qubes-git-syncer
 
 dom0-sync(){
-    if [ -z $1 ] || [ -z $2 ] || [ -z $3 ] || [ -z $4 ]; then
+    if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ]; then
         echo "usage: dom0-sync <direction> <vm_name> <dom0dirpath> <file_name> [<vm_path>]"
         echo -e "\t direction\t\t Either F (from dom0 to vm) or T (to dom0)."
         echo -e "\t vm_name\t\t Name of the VM."
@@ -188,20 +188,21 @@ dom0-sync(){
       echo "git bundle create ${DOM0DIRPATH}/${FILENAME} --all"
       echo "sudo qvm-move-to-vm ${VM} ${DOM0DIRPATH}/${FILENAME}" && echo ""
 	  echo "Confirm (hit Enter) or cancel (Ctrl+c):"
-      read T
-      git bundle create $DOM0DIRPATH/$FILENAME --all
-      sudo qvm-move-to-vm $VM $DOM0DIRPATH/$FILENAME
+      read -r T
+      git bundle create "$DOM0DIRPATH"/"$FILENAME" --all
+      sudo qvm-move-to-vm "$VM" "$DOM0DIRPATH"/"$FILENAME"
       ;;
     [t/T])
-      if [ -z VMPATH ] ; then
+      if [ -z "$VMPATH" ] ; then
           echo "VM path to git root on the VM?"
-          read VMPATH
+          read -r VMPATH
 	  fi
       echo "(To dom0)"
       echo "sudo qvm-run --pass ${VM} 'cd ${VMPATH} && git bundle create - --all ' > ${DOM0DIRPATH}/${FILENAME}"
+      echo "Attention, it might be better to have all commits made and HEAD in place."
 	  echo "Confirm (hit Enter) or cancel (Ctrl+c):"
-      read T
-      sudo qvm-run --pass $VM "cd ${VMPATH} && git bundle create - --all" > $DOM0DIRPATH/$FILENAME
+      read -r T
+      sudo qvm-run --pass "$VM" "cd ${VMPATH} && git bundle create - --all" | sudo tee "$DOM0DIRPATH"/"$FILENAME" > /dev/null
       ;;
     *)
       echo ""
